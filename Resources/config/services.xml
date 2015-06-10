@@ -11,5 +11,8 @@
                 <argument type="service" id="openclassrooms.akismet.client"/>
             </call>
         </service>
+
+        <service id="openclassrooms.akismet.models.comment_builder" class="OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl">
+        </service>
     </services>
 </container>

@@ -4,6 +4,7 @@ namespace OpenClassrooms\Bundle\AkismetBundle\Tests\DependencyInjection;
 
 use OpenClassrooms\Bundle\AkismetBundle\DependencyInjection\OpenClassroomsAkismetExtension;
 use OpenClassrooms\Bundle\AkismetBundle\OpenClassroomsAkismetBundle;
+use OpenClassrooms\Bundle\AkismetBundle\Tests\Doubles\HttpFoundation\RequestStackMock;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -93,6 +94,7 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->container = new ContainerBuilder();
         $this->extension = new OpenClassroomsAkismetExtension();
+        $this->container->set('request_stack', new RequestStackMock());
         $this->container->registerExtension($this->extension);
         $this->container->loadFromExtension('open_classrooms_akismet');
         $this->configLoader = new YamlFileLoader(

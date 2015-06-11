@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\DependencyInjection;
+namespace OpenClassrooms\Bundle\AkismetBundle\Tests\DependencyInjection;
 
-use OpenClassrooms\Akismet\Client\Client;
 use OpenClassrooms\Bundle\AkismetBundle\DependencyInjection\OpenClassroomsAkismetExtension;
 use OpenClassrooms\Bundle\AkismetBundle\OpenClassroomsAkismetBundle;
 use Symfony\Component\Config\FileLocator;
@@ -69,7 +68,6 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
         $expectedBaseUrl = 'https://api-key.rest.akismet.com/1.1/';
         $this->configLoader->load('config.yml');
         $this->container->compile();
-        /** @var Client $client */
         $client = $this->container->get('openclassrooms.akismet.client');
         $rc = new \ReflectionClass($client);
         $rp = $rc->getProperty('guzzle');

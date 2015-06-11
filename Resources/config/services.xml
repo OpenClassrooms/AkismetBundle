@@ -6,13 +6,15 @@
             <argument>%openclassrooms.akismet.blog_url%</argument>
         </service>
 
-        <service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl">
+        <service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl">
             <call method="setClient">
                 <argument type="service" id="openclassrooms.akismet.client"/>
             </call>
+            <call method="setRequestStack">
+                <argument type="service" id="request_stack"/>
+            </call>
         </service>
 
-        <service id="openclassrooms.akismet.models.comment_builder" class="OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl">
-        </service>
+        <service id="openclassrooms.akismet.models.comment_builder" class="OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl"/>
     </services>
 </container>

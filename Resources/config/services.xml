@@ -2,13 +2,19 @@
     <services>
 
         <service id="openclassrooms.akismet.client" class="OpenClassrooms\Akismet\Client\Impl\ClientImpl">
-            <argument>%openclassrooms.akismet.api_key%</argument>
-            <argument>%openclassrooms.akismet.blog_url%</argument>
+            <argument>%openclassrooms.akismet.key%</argument>
+            <argument>%openclassrooms.akismet.blog%</argument>
+        </service>
+
+        <service id="openclassrooms.akismet.services.default_akismet_service" class="OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl">
+            <call method="setClient">
+                <argument type="service" id="openclassrooms.akismet.client"/>
+            </call>
         </service>
 
         <service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl">
-            <call method="setClient">
-                <argument type="service" id="openclassrooms.akismet.client"/>
+            <call method="setAkismet">
+                <argument type="service" id="openclassrooms.akismet.services.default_akismet_service"/>
             </call>
             <call method="setRequestStack">
                 <argument type="service" id="request_stack"/>

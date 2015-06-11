@@ -2,8 +2,7 @@
 
 namespace OpenClassrooms\Bundle\AkismetBundle\Services\Impl;
 
-use OpenClassrooms\Akismet\Client\Client;
-use OpenClassrooms\Akismet\Models\Impl\Comment;
+use OpenClassrooms\Akismet\Models\Comment;
 use OpenClassrooms\Akismet\Services\AkismetService;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -14,9 +13,9 @@ class AkismetServiceImpl implements AkismetService
 {
 
     /**
-     * @var Client
+     * @var AkismetService
      */
-    private $client;
+    private $akismet;
 
     /**
      * @var RequestStack
@@ -30,22 +29,16 @@ class AkismetServiceImpl implements AkismetService
     {
         $request = $this->requestStack->getCurrentRequest();
 
-        $params = array(
-            'user_ip'              => $request->getClientIp(),
-            'user_agent'           => $request->headers->get('User-Agent'),
-            'referrer'             => $request->headers->get('referrer'),
-            'permalink'            => $comment->permalink,
-            'comment_author'       => $comment->authorName,
-            'comment_author_email' => $comment->authorEmail,
-            'comment_content'      => $comment->content
-        );
+        $comment->setUserIp($request->getClientIp());
+        $comment->setUserAgent($request->headers->get('User-Agent'));
+        $comment->setReferrer($request->headers->get('referrer'));
 
-        return $this->client->post(self::RESOURCE, $params);
+        return $this->akismet->commentCheck($comment);
     }
 
-    public function setClient(Client $client)
+    public function setAkismet(AkismetService $akismet)
     {
-        $this->client = $client;
+        $this->akismet = $akismet;
     }
 
     public function setRequestStack(RequestStack $requestStack)

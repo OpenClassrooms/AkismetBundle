@@ -19,8 +19,8 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('open_classrooms_akismet');
         $rootNode->children()
-            ->scalarNode('api_key')->isRequired()->end()
-            ->scalarNode('blog_url')->isRequired()->end()
+            ->scalarNode('key')->isRequired()->end()
+            ->scalarNode('blog')->isRequired()->end()
             ->end();
 
         return $treeBuilder;

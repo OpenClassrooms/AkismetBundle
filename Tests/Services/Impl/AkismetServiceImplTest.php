@@ -4,6 +4,7 @@ namespace OpenClassrooms\Bundle\AkismetBundle\Tests\Services\Impl;
 
 use OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl;
 use OpenClassrooms\Akismet\Services\AkismetService;
+use OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl as Akismet;
 use OpenClassrooms\Akismet\Tests\Models\CommentStub;
 use OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl;
 use OpenClassrooms\Bundle\AkismetBundle\Tests\Doubles\Client\ClientMock;
@@ -60,8 +61,19 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->akismetService = new AkismetServiceImpl();
-        $this->akismetService->setClient(new ClientMock());
+        $this->akismetService->setAkismet($this->getAkismet());
         ClientMock::$postReturn = true;
         $this->akismetService->setRequestStack(new RequestStackMock());
+    }
+
+    /**
+     * @return Akismet
+     */
+    private function ggetAkismet()
+    {
+        $akismet = new Akismet();
+        $akismet->setClient(new ClientMock());
+
+        return $akismet;
     }
 }

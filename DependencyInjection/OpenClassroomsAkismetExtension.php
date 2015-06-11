@@ -23,7 +23,7 @@ class OpenClassroomsAkismetExtension extends Extension
 
         $config = $this->processConfiguration(new Configuration(), $config);
 
-        $container->setParameter('openclassrooms.akismet.api_key', $config['api_key']);
-        $container->setParameter('openclassrooms.akismet.blog_url', $config['blog_url']);
+        $container->setParameter('openclassrooms.akismet.key', $config['key']);
+        $container->setParameter('openclassrooms.akismet.blog', $config['blog']);
     }
 }

@@ -66,7 +66,7 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function Configuration()
     {
-        $expectedBaseUrl = 'https://api-key.rest.akismet.com/1.1/';
+        $expectedBaseUrl = 'https://key.rest.akismet.com/1.1/';
         $this->configLoader->load('config.yml');
         $this->container->compile();
         $client = $this->container->get('openclassrooms.akismet.client');

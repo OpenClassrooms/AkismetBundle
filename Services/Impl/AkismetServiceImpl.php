@@ -23,17 +23,42 @@ class AkismetServiceImpl implements AkismetService
     private $requestStack;
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function commentCheck(Comment $comment)
+    {
+        $this->overLoadComment($comment);
+
+        return $this->akismet->commentCheck($comment);
+    }
+
+    private function overLoadComment(Comment $comment)
     {
         $request = $this->requestStack->getCurrentRequest();
 
         $comment->setUserIp($request->getClientIp());
         $comment->setUserAgent($request->headers->get('User-Agent'));
         $comment->setReferrer($request->headers->get('referrer'));
+    }
 
-        return $this->akismet->commentCheck($comment);
+    /**
+     * {@inheritdoc}
+     */
+    public function submitSpam(Comment $comment)
+    {
+        $this->overLoadComment($comment);
+
+        return $this->akismet->submitSpam($comment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function submitHam(Comment $comment)
+    {
+        $this->overLoadComment($comment);
+
+        return $this->akismet->submitHam($comment);
     }
 
     public function setAkismet(AkismetService $akismet)
@@ -45,4 +70,5 @@ class AkismetServiceImpl implements AkismetService
     {
         $this->requestStack = $requestStack;
     }
+
 }

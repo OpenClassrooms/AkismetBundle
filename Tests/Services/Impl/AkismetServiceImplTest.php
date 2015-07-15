@@ -3,6 +3,7 @@
 namespace OpenClassrooms\Bundle\AkismetBundle\Tests\Services\Impl;
 
 use OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl;
+use OpenClassrooms\Akismet\Models\Resource;
 use OpenClassrooms\Akismet\Services\AkismetService;
 use OpenClassrooms\Akismet\Tests\Models\CommentStub;
 use OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl as Akismet;
@@ -30,6 +31,8 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
      */
     public function commentCheck()
     {
+        ClientMock::$postReturn = 'true';
+
         $commentBuilder = new CommentBuilderImpl();
 
         $response = $this->akismetService->commentCheck(
@@ -43,7 +46,49 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue($response);
-        $this->assertEquals(AkismetService::RESOURCE, ClientMock::$resource);
+        $this->assertEquals(Resource::COMMENT_CHECK, ClientMock::$resource);
+        $this->assertCommentCheckParams();
+    }
+
+    /**
+     * @test
+     */
+    public function submitSpam()
+    {
+        $commentBuilder = new CommentBuilderImpl();
+
+        $this->akismetService->submitSpam(
+            $commentBuilder
+                ->create()
+                ->withPermalink(CommentStub::PERMALINK)
+                ->withAuthorName(CommentStub::AUTHOR_NAME)
+                ->withAuthorEmail(CommentStub::AUTHOR_EMAIL)
+                ->withContent(CommentStub::CONTENT)
+                ->build()
+        );
+
+        $this->assertEquals(Resource::SUBMIT_SPAM, ClientMock::$resource);
+        $this->assertCommentCheckParams();
+    }
+
+    /**
+     * @test
+     */
+    public function submitHam()
+    {
+        $commentBuilder = new CommentBuilderImpl();
+
+        $this->akismetService->submitHam(
+            $commentBuilder
+                ->create()
+                ->withPermalink(CommentStub::PERMALINK)
+                ->withAuthorName(CommentStub::AUTHOR_NAME)
+                ->withAuthorEmail(CommentStub::AUTHOR_EMAIL)
+                ->withContent(CommentStub::CONTENT)
+                ->build()
+        );
+
+        $this->assertEquals(Resource::SUBMIT_HAM, ClientMock::$resource);
         $this->assertCommentCheckParams();
     }
 
@@ -62,7 +107,6 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
     {
         $this->akismetService = new AkismetServiceImpl();
         $this->akismetService->setAkismet($this->getAkismet());
-        ClientMock::$postReturn = true;
         $this->akismetService->setRequestStack(new RequestStackMock());
     }
 

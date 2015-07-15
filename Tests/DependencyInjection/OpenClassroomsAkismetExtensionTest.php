@@ -76,7 +76,7 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
         /** @var \GuzzleHttp\Client $guzzle */
         $guzzle = $rp->getValue($client);
 
-        $this->assertEquals($expectedBaseUrl, $guzzle->getBaseUrl());
+        $this->assertEquals($expectedBaseUrl, $guzzle->getConfig('base_uri'));
     }
 
     /**

@@ -7,7 +7,7 @@ php:
 
 before_script:
   - composer self-update
-  - composer install --no-scripts --no-interaction --dev
+  - composer install --no-scripts --no-interaction
   - composer dump-autoload -o
   - phpenv config-add ./Tests/travis.ini
 

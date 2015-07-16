@@ -27,18 +27,21 @@ class AkismetServiceImpl implements AkismetService
      */
     public function commentCheck(Comment $comment)
     {
-        $this->overLoadComment($comment);
-
-        return $this->akismet->commentCheck($comment);
+        return $this->akismet->commentCheck($this->completeComment($comment));
     }
 
-    private function overLoadComment(Comment $comment)
+    /**
+     * @return Comment
+     */
+    private function completeComment(Comment $comment)
     {
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->requestStack->getMasterRequest();
 
         $comment->setUserIp($request->getClientIp());
         $comment->setUserAgent($request->headers->get('User-Agent'));
         $comment->setReferrer($request->headers->get('referrer'));
+
+        return $comment;
     }
 
     /**
@@ -46,9 +49,7 @@ class AkismetServiceImpl implements AkismetService
      */
     public function submitSpam(Comment $comment)
     {
-        $this->overLoadComment($comment);
-
-        return $this->akismet->submitSpam($comment);
+        return $this->akismet->submitSpam($this->completeComment($comment));
     }
 
     /**
@@ -56,9 +57,7 @@ class AkismetServiceImpl implements AkismetService
      */
     public function submitHam(Comment $comment)
     {
-        $this->overLoadComment($comment);
-
-        return $this->akismet->submitHam($comment);
+        return $this->akismet->submitHam($this->completeComment($comment));
     }
 
     public function setAkismet(AkismetService $akismet)

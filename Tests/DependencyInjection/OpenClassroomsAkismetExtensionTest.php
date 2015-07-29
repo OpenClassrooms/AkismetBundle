@@ -4,11 +4,11 @@ namespace OpenClassrooms\Bundle\AkismetBundle\Tests\DependencyInjection;
 
 use OpenClassrooms\Bundle\AkismetBundle\DependencyInjection\OpenClassroomsAkismetExtension;
 use OpenClassrooms\Bundle\AkismetBundle\OpenClassroomsAkismetBundle;
-use OpenClassrooms\Bundle\AkismetBundle\Tests\Doubles\HttpFoundation\RequestStackMock;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @author Arnaud Lefèvre <arnaud.lefevre@openclassrooms.com>
@@ -76,7 +76,7 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
         /** @var \GuzzleHttp\Client $guzzle */
         $guzzle = $rp->getValue($client);
 
-        $this->assertEquals($expectedBaseUrl, $guzzle->getBaseUrl());
+        $this->assertEquals($expectedBaseUrl, $guzzle->getConfig('base_uri'));
     }
 
     /**
@@ -94,7 +94,7 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->container = new ContainerBuilder();
         $this->extension = new OpenClassroomsAkismetExtension();
-        $this->container->set('request_stack', new RequestStackMock());
+        $this->container->set('request_stack', new RequestStack());
         $this->container->registerExtension($this->extension);
         $this->container->loadFromExtension('open_classrooms_akismet');
         $this->configLoader = new YamlFileLoader(

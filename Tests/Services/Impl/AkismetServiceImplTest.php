@@ -3,12 +3,14 @@
 namespace OpenClassrooms\Bundle\AkismetBundle\Tests\Services\Impl;
 
 use OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl;
+use OpenClassrooms\Akismet\Models\Resource;
 use OpenClassrooms\Akismet\Services\AkismetService;
-use OpenClassrooms\Akismet\Tests\Models\CommentStub;
 use OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl as Akismet;
+use OpenClassrooms\Akismet\Tests\Models\CommentStub;
 use OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl;
 use OpenClassrooms\Bundle\AkismetBundle\Tests\Doubles\Client\ClientMock;
-use OpenClassrooms\Bundle\AkismetBundle\Tests\Doubles\HttpFoundation\RequestStackMock;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AkismetServiceImplTest
@@ -18,7 +20,12 @@ use OpenClassrooms\Bundle\AkismetBundle\Tests\Doubles\HttpFoundation\RequestStac
 class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
 {
     const KEY = '123APIKey';
+
     const BLOG_URL = 'http://www.blogdomainname.com/';
+
+    const USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6';
+
+    const REFERRER = 'http://www.google.com';
 
     /**
      * @var AkismetService
@@ -30,6 +37,8 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
      */
     public function commentCheck()
     {
+        ClientMock::$postReturn = 'true';
+
         $commentBuilder = new CommentBuilderImpl();
 
         $response = $this->akismetService->commentCheck(
@@ -43,7 +52,49 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue($response);
-        $this->assertEquals(AkismetService::RESOURCE, ClientMock::$resource);
+        $this->assertEquals(Resource::COMMENT_CHECK, ClientMock::$resource);
+        $this->assertCommentCheckParams();
+    }
+
+    /**
+     * @test
+     */
+    public function submitSpam()
+    {
+        $commentBuilder = new CommentBuilderImpl();
+
+        $this->akismetService->submitSpam(
+            $commentBuilder
+                ->create()
+                ->withPermalink(CommentStub::PERMALINK)
+                ->withAuthorName(CommentStub::AUTHOR_NAME)
+                ->withAuthorEmail(CommentStub::AUTHOR_EMAIL)
+                ->withContent(CommentStub::CONTENT)
+                ->build()
+        );
+
+        $this->assertEquals(Resource::SUBMIT_SPAM, ClientMock::$resource);
+        $this->assertCommentCheckParams();
+    }
+
+    /**
+     * @test
+     */
+    public function submitHam()
+    {
+        $commentBuilder = new CommentBuilderImpl();
+
+        $this->akismetService->submitHam(
+            $commentBuilder
+                ->create()
+                ->withPermalink(CommentStub::PERMALINK)
+                ->withAuthorName(CommentStub::AUTHOR_NAME)
+                ->withAuthorEmail(CommentStub::AUTHOR_EMAIL)
+                ->withContent(CommentStub::CONTENT)
+                ->build()
+        );
+
+        $this->assertEquals(Resource::SUBMIT_HAM, ClientMock::$resource);
         $this->assertCommentCheckParams();
     }
 
@@ -61,19 +112,32 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->akismetService = new AkismetServiceImpl();
-        $this->akismetService->setAkismet($this->getAkismet());
-        ClientMock::$postReturn = true;
-        $this->akismetService->setRequestStack(new RequestStackMock());
+        $this->akismetService->setAkismet($this->buildAkismet());
+        $this->akismetService->setRequestStack($this->buildRequestStack());
     }
 
     /**
      * @return Akismet
      */
-    private function getAkismet()
+    private function buildAkismet()
     {
         $akismet = new Akismet();
         $akismet->setClient(new ClientMock());
 
         return $akismet;
+    }
+
+    /**
+     * @return RequestStack
+     */
+    protected function buildRequestStack()
+    {
+        $request = Request::create('http://localhost');
+        $request->headers->set('User-Agent', self::USER_AGENT);
+        $request->headers->set('referrer', self::REFERRER);
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        return $requestStack;
     }
 }

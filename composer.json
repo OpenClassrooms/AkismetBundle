@@ -24,7 +24,7 @@
         "symfony/dependency-injection": "~2.6",
         "symfony/config": "~2.6",
 
-        "openclassrooms/akismet": "dev-OC-3931_add_spam_button@dev"
+        "openclassrooms/akismet": "dev-master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.7",

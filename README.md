@@ -56,11 +56,11 @@ if ($akismetService->commentCheck($comment)) {
  // store the comment normally
 }
 
-and
+// and
 
 $akismetService->submitSpam($comment);
 
-and
+// and
 
 $akismetService->submitHam($comment);
 ```

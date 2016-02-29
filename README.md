@@ -5,7 +5,7 @@ AkismetBundle
 [![Coverage Status](https://coveralls.io/repos/OpenClassrooms/AkismetBundle/badge.svg?branch=master)](https://coveralls.io/r/OpenClassrooms/AkismetBundle?branch=master)
 
 The AkismetBundle offers integration of the Akismet Library.
-Akismet Library is a PHP5 library that provides Akismet Spam Protection functionality in your application.
+Akismet Library is a PHP5 library that provides [Akismet Spam Protection service](https://akismet.com/) functionality in your application.
 See [Akismet](https://github.com/OpenClassrooms/Akismet) for full details.
 
 ## Installation

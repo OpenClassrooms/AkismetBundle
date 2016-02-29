@@ -11,7 +11,7 @@ See [Akismet](https://github.com/OpenClassrooms/Akismet) for full details.
 ## Installation
 This bundle can be installed using composer:
 
-```Composer require openclassrooms/akismet-bundle````
+```composer require openclassrooms/akismet-bundle```
 or by adding the package to the composer.json file directly
 ```json
 {
@@ -26,7 +26,7 @@ After the package has been installed, add the bundle to the AppKernel.php file:
 // in AppKernel::registerBundles()
 $bundles = array(
     // ...
-    new OpenClassrooms\Bundle\ServiceProxyBundle\OpenClassroomsServiceProxyBundle(),
+    new OpenClassrooms\Bundle\AkismetBundle\OpenClassroomsAkismetBundle(),
     // ...
 );
 ```
@@ -50,7 +50,7 @@ $comment = $commentBuilder->create()
                           ...
                           ->build();
                
-if ($akismetService->commentCheck($comment)) {
+if ($akismet->commentCheck($comment)) {
  // store the comment and mark it as spam (in case of a mis-diagnosis).
 } else {
  // store the comment normally
@@ -58,9 +58,9 @@ if ($akismetService->commentCheck($comment)) {
 
 // and
 
-$akismetService->submitSpam($comment);
+$akismet->submitSpam($comment);
 
 // and
 
-$akismetService->submitHam($comment);
+$akismet->submitHam($comment);
 ```

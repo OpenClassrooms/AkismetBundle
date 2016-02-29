@@ -43,10 +43,10 @@ open_classrooms_akismet:
 ```
 
 ## Usage
+### Default Service
 ```php
-
 $commentBuilder = $container->get('openclassrooms.akismet.models.comment_builder');
-$akismet = $container->get('openclassrooms.akismet.services.akismet_service');
+$akismet = $container->get('openclassrooms.akismet.services.default_akismet_service');
 
 $comment = $commentBuilder->create()
                           ...
@@ -65,4 +65,28 @@ $akismet->submitSpam($comment);
 // and
 
 $akismet->submitHam($comment);
+```
+
+### Bridge Service
+The Bundle Integrate a bridge service which get the Symfony2 requestStack to set automatically the UserIP, UserAgent and Referrer.
+```xml
+<service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl">
+    <call method="setAkismet">
+        <argument type="service" id="openclassrooms.akismet.services.default_akismet_service"/>
+    </call>
+    <call method="setRequestStack">
+        <argument type="service" id="request_stack"/>
+    </call>
+</service>
+```
+
+You can use it by getting this service id
+```php
+$akismet = $container->get('openclassrooms.akismet.services.akismet_service');
+
+```
+instead that
+```php
+$akismet = $container->get('openclassrooms.akismet.services.default_akismet_service');
+
 ```

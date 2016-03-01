@@ -5,14 +5,16 @@ AkismetBundle
 [![Coverage Status](https://coveralls.io/repos/OpenClassrooms/AkismetBundle/badge.svg?branch=master)](https://coveralls.io/r/OpenClassrooms/AkismetBundle?branch=master)
 
 The AkismetBundle offers integration of the Akismet Library.
-Akismet Library is a PHP5 library that provides functionality of Akismet Spam Protection service in your application.
+Akismet Library is a PHP5 library that provides [Akismet Spam Protection service](https://akismet.com/) functionality in your application.
 See [Akismet](https://github.com/OpenClassrooms/Akismet) for full details.
 
 ## Installation
 This bundle can be installed using composer:
 
 ```composer require openclassrooms/akismet-bundle```
-or by adding the package to the composer.json file directly
+
+or by adding the package to the composer.json file directly:
+
 ```json
 {
     "require": {
@@ -41,10 +43,10 @@ open_classrooms_akismet:
 ```
 
 ## Usage
+### Default Service
 ```php
-
 $commentBuilder = $container->get('openclassrooms.akismet.models.comment_builder');
-$akismet = $container->get('openclassrooms.akismet.services.akismet_service');
+$akismet = $container->get('openclassrooms.akismet.services.default_akismet_service');
 
 $comment = $commentBuilder->create()
                           ...
@@ -63,4 +65,28 @@ $akismet->submitSpam($comment);
 // and
 
 $akismet->submitHam($comment);
+```
+
+### Bridge Service
+The Bundle Integrate a bridge service which get the Symfony2 requestStack to set automatically the UserIP, UserAgent and Referrer.
+```xml
+<service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl">
+    <call method="setAkismet">
+        <argument type="service" id="openclassrooms.akismet.services.default_akismet_service"/>
+    </call>
+    <call method="setRequestStack">
+        <argument type="service" id="request_stack"/>
+    </call>
+</service>
+```
+
+You can use it by getting this service id
+```php
+$akismet = $container->get('openclassrooms.akismet.services.akismet_service');
+
+```
+instead that
+```php
+$akismet = $container->get('openclassrooms.akismet.services.default_akismet_service');
+
 ```

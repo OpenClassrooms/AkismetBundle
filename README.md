@@ -68,7 +68,7 @@ $akismet->submitHam($comment);
 ```
 
 ### Bridge Service
-The Bundle Integrate a bridge service which get the Symfony2 requestStack to set automatically the UserIP, UserAgent and Referrer.
+The Bundle integrates a bridge service which gets the Symfony2 requestStack to automatically set the UserIP, UserAgent and Referrer.
 ```xml
 <service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl">
     <call method="setAkismet">
@@ -80,12 +80,12 @@ The Bundle Integrate a bridge service which get the Symfony2 requestStack to set
 </service>
 ```
 
-You can use it by getting this service id
+You can use it by getting this service id:
 ```php
 $akismet = $container->get('openclassrooms.akismet.services.akismet_service');
 
 ```
-instead that
+instead of:
 ```php
 $akismet = $container->get('openclassrooms.akismet.services.default_akismet_service');
 

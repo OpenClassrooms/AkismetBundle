@@ -10,14 +10,13 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('open_classrooms_akismet');
+        $rootNode = $treeBuilder->root('openclassrooms_akismet');
         $rootNode->children()
             ->scalarNode('key')->isRequired()->end()
             ->scalarNode('blog')->isRequired()->end()

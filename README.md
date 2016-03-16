@@ -37,7 +37,7 @@ $bundles = array(
 ```yml
 # app/config/config.yml
 
-open_classrooms_akismet:
+openclassrooms_akismet:
     key:  %akismet.key%
     blog: %akismet.blog%
 ```

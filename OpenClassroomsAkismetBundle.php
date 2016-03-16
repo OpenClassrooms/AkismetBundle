@@ -2,6 +2,7 @@
 
 namespace OpenClassrooms\Bundle\AkismetBundle;
 
+use OpenClassrooms\Bundle\AkismetBundle\DependencyInjection\OpenClassroomsAkismetExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -9,5 +10,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class OpenClassroomsAkismetBundle extends Bundle
 {
-
+    /**
+     * @inheritdoc
+     */
+    public function getContainerExtension()
+    {
+        return new OpenClassroomsAkismetExtension();
+    }
 }

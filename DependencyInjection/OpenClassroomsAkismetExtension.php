@@ -12,18 +12,25 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class OpenClassroomsAkismetExtension extends Extension
 {
-
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('services.xml');
 
         $config = $this->processConfiguration(new Configuration(), $config);
 
         $container->setParameter('openclassrooms.akismet.key', $config['key']);
         $container->setParameter('openclassrooms.akismet.blog', $config['blog']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAlias()
+    {
+        return 'openclassrooms_akismet';
     }
 }

@@ -96,7 +96,7 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
         $this->extension = new OpenClassroomsAkismetExtension();
         $this->container->set('request_stack', new RequestStack());
         $this->container->registerExtension($this->extension);
-        $this->container->loadFromExtension('open_classrooms_akismet');
+        $this->container->loadFromExtension('openclassrooms_akismet');
         $this->configLoader = new YamlFileLoader(
             $this->container,
             new FileLocator(__DIR__ . '/Fixtures/Resources/config')

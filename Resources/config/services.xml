@@ -1,6 +1,6 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="openclassrooms.akismet.client" class="OpenClassrooms\Akismet\Client\Impl\ClientImpl">
+        <service id="openclassrooms.akismet.client" class="OpenClassrooms\Akismet\Client\Impl\ApiClientImpl">
             <argument>%openclassrooms.akismet.key%</argument>
             <argument>%openclassrooms.akismet.blog%</argument>
         </service>

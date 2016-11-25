@@ -2,13 +2,12 @@
 
 namespace OpenClassrooms\Bundle\AkismetBundle\Tests\Services\Impl;
 
+use OpenClassrooms\Akismet\Doubles\Client\Impl\ApiClientMock;
+use OpenClassrooms\Akismet\Doubles\Models\CommentStub;
 use OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl;
-use OpenClassrooms\Akismet\Models\Resource;
 use OpenClassrooms\Akismet\Services\AkismetService;
 use OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl as Akismet;
-use OpenClassrooms\Akismet\Tests\Models\CommentStub;
 use OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl;
-use OpenClassrooms\Bundle\AkismetBundle\Tests\Doubles\Client\ClientMock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -19,13 +18,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
 {
-    const KEY = '123APIKey';
-
     const BLOG_URL = 'http://www.blogdomainname.com/';
 
-    const USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6';
+    const KEY = '123APIKey';
 
     const REFERRER = 'http://www.google.com';
+
+    const USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6';
 
     /**
      * @var AkismetService
@@ -37,7 +36,7 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
      */
     public function commentCheck()
     {
-        ClientMock::$postReturn = 'true';
+        ApiClientMock::$postReturn = 'true';
 
         $commentBuilder = new CommentBuilderImpl();
 
@@ -52,8 +51,19 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue($response);
-        $this->assertEquals(Resource::COMMENT_CHECK, ClientMock::$resource);
+        $this->assertEquals(Akismet::COMMENT_CHECK, ApiClientMock::$resource);
         $this->assertCommentCheckParams();
+    }
+
+    private function assertCommentCheckParams()
+    {
+        $this->assertEquals(CommentStub::USER_IP, ApiClientMock::$params['user_ip']);
+        $this->assertEquals(CommentStub::USER_AGENT, ApiClientMock::$params['user_agent']);
+        $this->assertEquals(CommentStub::REFERRER, ApiClientMock::$params['referrer']);
+        $this->assertEquals(CommentStub::PERMALINK, ApiClientMock::$params['permalink']);
+        $this->assertEquals(CommentStub::AUTHOR_NAME, ApiClientMock::$params['comment_author']);
+        $this->assertEquals(CommentStub::AUTHOR_EMAIL, ApiClientMock::$params['comment_author_email']);
+        $this->assertEquals(CommentStub::CONTENT, ApiClientMock::$params['comment_content']);
     }
 
     /**
@@ -73,7 +83,7 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
                 ->build()
         );
 
-        $this->assertEquals(Resource::SUBMIT_SPAM, ClientMock::$resource);
+        $this->assertEquals(Akismet::SUBMIT_SPAM, ApiClientMock::$resource);
         $this->assertCommentCheckParams();
     }
 
@@ -94,19 +104,8 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
                 ->build()
         );
 
-        $this->assertEquals(Resource::SUBMIT_HAM, ClientMock::$resource);
+        $this->assertEquals(Akismet::SUBMIT_HAM, ApiClientMock::$resource);
         $this->assertCommentCheckParams();
-    }
-
-    private function assertCommentCheckParams()
-    {
-        $this->assertEquals(CommentStub::USER_IP, ClientMock::$params['user_ip']);
-        $this->assertEquals(CommentStub::USER_AGENT, ClientMock::$params['user_agent']);
-        $this->assertEquals(CommentStub::REFERRER, ClientMock::$params['referrer']);
-        $this->assertEquals(CommentStub::PERMALINK, ClientMock::$params['permalink']);
-        $this->assertEquals(CommentStub::AUTHOR_NAME, ClientMock::$params['comment_author']);
-        $this->assertEquals(CommentStub::AUTHOR_EMAIL, ClientMock::$params['comment_author_email']);
-        $this->assertEquals(CommentStub::CONTENT, ClientMock::$params['comment_content']);
     }
 
     protected function setUp()
@@ -122,7 +121,7 @@ class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
     private function buildAkismet()
     {
         $akismet = new Akismet();
-        $akismet->setClient(new ClientMock());
+        $akismet->setApiClient(new ApiClientMock());
 
         return $akismet;
     }

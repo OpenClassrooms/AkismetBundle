@@ -2,11 +2,9 @@
 
 namespace OpenClassrooms\Bundle\AkismetBundle\Tests\DependencyInjection;
 
-use OpenClassrooms\Bundle\AkismetBundle\DependencyInjection\OpenClassroomsAkismetExtension;
 use OpenClassrooms\Bundle\AkismetBundle\OpenClassroomsAkismetBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -15,12 +13,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
 {
-
-    /**
-     * @var ExtensionInterface
-     */
-    private $extension;
-
     /**
      * @var ContainerBuilder
      */
@@ -66,12 +58,13 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function Configuration()
     {
-        $expectedBaseUrl = 'https://key.rest.akismet.com/1.1/';
         $this->configLoader->load('config.yml');
         $this->container->compile();
+
+        $expectedBaseUrl = 'https://key.rest.akismet.com/1.1/';
         $client = $this->container->get('openclassrooms.akismet.client');
         $rc = new \ReflectionClass($client);
-        $rp = $rc->getProperty('guzzle');
+        $rp = $rc->getProperty('client');
         $rp->setAccessible(true);
         /** @var \GuzzleHttp\Client $guzzle */
         $guzzle = $rp->getValue($client);
@@ -92,16 +85,17 @@ class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $bundle = new OpenClassroomsAkismetBundle();
+
         $this->container = new ContainerBuilder();
-        $this->extension = new OpenClassroomsAkismetExtension();
         $this->container->set('request_stack', new RequestStack());
-        $this->container->registerExtension($this->extension);
+        $this->container->registerExtension($bundle->getContainerExtension());
         $this->container->loadFromExtension('openclassrooms_akismet');
+
         $this->configLoader = new YamlFileLoader(
             $this->container,
             new FileLocator(__DIR__ . '/Fixtures/Resources/config')
         );
-        $bundle = new OpenClassroomsAkismetBundle();
         $bundle->build($this->container);
     }
 }

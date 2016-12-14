@@ -6,7 +6,7 @@
         </service>
 
         <service id="openclassrooms.akismet.services.default_akismet_service" class="OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl">
-            <call method="setClient">
+            <call method="setApiClient">
                 <argument type="service" id="openclassrooms.akismet.client"/>
             </call>
         </service>

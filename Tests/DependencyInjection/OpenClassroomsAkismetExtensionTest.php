@@ -3,6 +3,7 @@
 namespace OpenClassrooms\Bundle\AkismetBundle\Tests\DependencyInjection;
 
 use OpenClassrooms\Bundle\AkismetBundle\OpenClassroomsAkismetBundle;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * @author Arnaud Lefèvre <arnaud.lefevre@openclassrooms.com>
  */
-class OpenClassroomsAkismetExtensionTest extends \PHPUnit_Framework_TestCase
+class OpenClassroomsAkismetExtensionTest extends TestCase
 {
     /**
      * @var ContainerBuilder

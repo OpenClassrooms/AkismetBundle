@@ -24,19 +24,19 @@
     }
   },
   "require": {
-    "php": ">=5.4",
-    "symfony/http-kernel": ">=2.7 <4",
-    "symfony/dependency-injection": ">=2.7 <4",
-    "symfony/config": ">=2.7 <4",
+    "php": ">=7.1",
+    "symfony/http-kernel": "~3.4 || ~4.0",
+    "symfony/dependency-injection": "~3.4 || ~4.0",
+    "symfony/config": "~3.4 || ~4.0",
     "openclassrooms/akismet": "~2.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~5.5",
-    "satooshi/php-coveralls": "dev-master"
+    "phpunit/phpunit": "~7",
+    "satooshi/php-coveralls": "~2.1"
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.0.x-dev"
+      "dev-master": "3.0.x-dev"
     }
   }
 }

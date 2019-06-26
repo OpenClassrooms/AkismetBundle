@@ -1,6 +1,6 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="openclassrooms.akismet.client" class="OpenClassrooms\Akismet\Client\Impl\ApiClientImpl">
+        <service id="openclassrooms.akismet.client" class="OpenClassrooms\Akismet\Client\Impl\ApiClientImpl" public="true">
             <argument>%openclassrooms.akismet.key%</argument>
             <argument>%openclassrooms.akismet.blog%</argument>
         </service>
@@ -11,7 +11,7 @@
             </call>
         </service>
 
-        <service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl">
+        <service id="openclassrooms.akismet.services.akismet_service" class="OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl" public="true">
             <call method="setAkismet">
                 <argument type="service" id="openclassrooms.akismet.services.default_akismet_service"/>
             </call>
@@ -20,6 +20,6 @@
             </call>
         </service>
 
-        <service id="openclassrooms.akismet.models.comment_builder" class="OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl"/>
+        <service id="openclassrooms.akismet.models.comment_builder" class="OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl" public="true"/>
     </services>
 </container>

@@ -8,6 +8,7 @@ use OpenClassrooms\Akismet\Models\Impl\CommentBuilderImpl;
 use OpenClassrooms\Akismet\Services\AkismetService;
 use OpenClassrooms\Akismet\Services\Impl\AkismetServiceImpl as Akismet;
 use OpenClassrooms\Bundle\AkismetBundle\Services\Impl\AkismetServiceImpl;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * @author Arnaud Lefèvre <arnaud.lefevre@openclassrooms.com>
  */
-class AkismetServiceImplTest extends \PHPUnit_Framework_TestCase
+class AkismetServiceImplTest extends TestCase
 {
     const BLOG_URL = 'http://www.blogdomainname.com/';
 

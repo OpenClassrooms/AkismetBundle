@@ -15,8 +15,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('openclassrooms_akismet');
+        $treeBuilder = new TreeBuilder('openclassrooms_akismet');
+        $rootNode = $treeBuilder->getRootNode();
         $rootNode->children()
             ->scalarNode('key')->isRequired()->end()
             ->scalarNode('blog')->isRequired()->end()

@@ -6,36 +6,24 @@ use OpenClassrooms\Akismet\Models\Comment;
 use OpenClassrooms\Akismet\Services\AkismetService;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * @author Arnaud Lefèvre <arnaud.lefevre@openclassrooms.com>
- */
 class AkismetServiceImpl implements AkismetService
 {
+    private AkismetService $akismet;
 
-    /**
-     * @var AkismetService
-     */
-    private $akismet;
+    private RequestStack $requestStack;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function commentCheck(Comment $comment)
+    public function commentCheck(Comment $comment): bool
     {
         return $this->akismet->commentCheck($this->completeComment($comment));
     }
 
-    /**
-     * @return Comment
-     */
-    private function completeComment(Comment $comment)
+    private function completeComment(Comment $comment): Comment
     {
         $request = $this->requestStack->getMasterRequest();
+
+        if (null === $request) {
+            return $comment;
+        }
 
         $comment->setUserIp($request->getClientIp());
         $comment->setUserAgent($request->headers->get('User-Agent'));
@@ -44,30 +32,23 @@ class AkismetServiceImpl implements AkismetService
         return $comment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function submitSpam(Comment $comment)
     {
         return $this->akismet->submitSpam($this->completeComment($comment));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function submitHam(Comment $comment)
     {
         return $this->akismet->submitHam($this->completeComment($comment));
     }
 
-    public function setAkismet(AkismetService $akismet)
+    public function setAkismet(AkismetService $akismet): void
     {
         $this->akismet = $akismet;
     }
 
-    public function setRequestStack(RequestStack $requestStack)
+    public function setRequestStack(RequestStack $requestStack): void
     {
         $this->requestStack = $requestStack;
     }
-
 }

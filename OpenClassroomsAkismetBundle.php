@@ -13,7 +13,7 @@ class OpenClassroomsAkismetBundle extends Bundle
     /**
      * @inheritdoc
      */
-    public function getContainerExtension()
+    public function getContainerExtension(): OpenClassroomsAkismetExtension
     {
         return new OpenClassroomsAkismetExtension();
     }

@@ -19,7 +19,7 @@ class AkismetServiceImpl implements AkismetService
 
     private function completeComment(Comment $comment): Comment
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
 
         if (null === $request) {
             return $comment;

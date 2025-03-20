@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+
+  tests:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        php-versions: [ '8.2', '8.3', '8.4' ]
+        symfony-version: ['5.4.*', '6.4.*', '7.2.*']
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: none
+
+      - name: Configure Symfony
+        run: composer config extra.symfony.require "${{ matrix.symfony-version }}"
+
+      - name: Update project dependencies
+        run: composer update --no-progress --ansi --prefer-stable
+
+      - name: Composer install
+        run: composer install --no-scripts --no-interaction --prefer-dist -oa
+
+      - name: Run Phpunit
+        run: ./vendor/bin/phpunit

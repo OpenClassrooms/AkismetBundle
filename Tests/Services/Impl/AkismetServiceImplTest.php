@@ -109,7 +109,7 @@ class AkismetServiceImplTest extends TestCase
         $this->assertCommentCheckParams();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->akismetService = new AkismetServiceImpl();
         $this->akismetService->setAkismet($this->buildAkismet());

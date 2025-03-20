@@ -4,6 +4,7 @@ namespace OpenClassrooms\Bundle\AkismetBundle\Tests\DependencyInjection;
 
 use OpenClassrooms\Bundle\AkismetBundle\OpenClassroomsAkismetBundle;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -26,30 +27,33 @@ class OpenClassroomsAkismetExtensionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function NoConfiguration_ThrowException()
     {
+        $this->expectException(InvalidConfigurationException::class);
+
         $this->configLoader->load('empty_config.yml');
         $this->container->compile();
     }
 
     /**
      * @test
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function WithoutBlogUrlConfiguration_ThrowException()
     {
+        $this->expectException(InvalidConfigurationException::class);
+
         $this->configLoader->load('without_blog_url_config.yml');
         $this->container->compile();
     }
 
     /**
      * @test
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function WithoutApiKeyConfiguration_ThrowException()
     {
+        $this->expectException(InvalidConfigurationException::class);
+
         $this->configLoader->load('without_api_key_config.yml');
         $this->container->compile();
     }
@@ -84,7 +88,7 @@ class OpenClassroomsAkismetExtensionTest extends TestCase
         $this->assertTrue($this->container->has('openclassrooms.akismet.services.akismet_service'));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $bundle = new OpenClassroomsAkismetBundle();
 
